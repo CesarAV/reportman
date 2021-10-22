@@ -8,6 +8,14 @@ incluye la actualización para .Net Framwork 4.6.1
 
 Uso desde un Web API de NET Core 3.1
 
+    using Microsoft.AspNetCore.Mvc;
+    using System.IO;
+
+    using Reportman.Drawing;
+    using Reportman.Reporting;
+    using System.Text;
+    using System.Threading.Tasks;
+
     [Route("api/[controller]")]
     [ApiController]
     public class PdfController : ControllerBase
