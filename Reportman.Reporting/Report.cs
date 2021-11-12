@@ -32,6 +32,9 @@ namespace Reportman.Reporting
 			: base()
 		{
 		}
+
+		private SubReport CurrentSubReport => SubReports.Count > CurrentSubReportIndex ? SubReports[CurrentSubReportIndex] : null;
+
 		override public void BeginPrint(PrintOut driver)
 		{
 			base.BeginPrint(driver);
@@ -169,7 +172,7 @@ namespace Reportman.Reporting
                     CurrentSubReportIndex++;
                     if (CurrentSubReportIndex >= SubReports.Count)
                         break;
-                    subrep = SubReports[CurrentSubReportIndex];
+                    subrep = CurrentSubReport;
                     if (subrep.ParentSubReport == null)
                     {
                         if (subrep.Alias.Length == 0)
@@ -330,7 +333,7 @@ namespace Reportman.Reporting
 			while (CurrentSubReportIndex < SubReports.Count)
 			{
 				CheckProgress(false);
-				subrep = SubReports[CurrentSubReportIndex];
+				subrep = CurrentSubReport;
 				// The first section are the group footers until
 				// CurrentGroup
 				while (subrep.CurrentGroupIndex != 0)
@@ -462,7 +465,7 @@ namespace Reportman.Reporting
 						CurrentSubReportIndex++;
 						if (CurrentSubReportIndex >= SubReports.Count)
 							break;
-						subrep = SubReports[CurrentSubReportIndex];
+						subrep = CurrentSubReport;
 						if (subrep.ParentSubReport == null)
 						{
 							if (subrep.IsDataAvailable())
@@ -857,8 +860,8 @@ namespace Reportman.Reporting
 		{
 			SubReport subrep;
 			bool aresult = false;
-			subrep = SubReports[CurrentSubReportIndex];
-			if (subrep.Alias.Length == 0)
+			subrep = CurrentSubReport;
+			if (subrep.Alias.Length == 0) // Configure "Con.D.Principal" on subreport settings
 				subrep.LastRecord = true;
 			else
 			{
@@ -944,7 +947,7 @@ namespace Reportman.Reporting
 			FGroupHeaders.Clear();
 			PrintedSomething = false;
 			if (section == null)
-				throw new UnNamedException("Last sectoin reached");
+				throw new UnNamedException("Last section reached");
 			if (subreport != null)
 			{
 				for (i = 0; i < SubReports.Count; i++)
